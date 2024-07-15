@@ -8,6 +8,7 @@ import Logo from './Logo';
 import Input from './Input';
 import { useLocation } from 'react-router-dom';
 import Button from './Button';
+import Loader from './Loader';
 
 export default function Login(){
     const {register,handleSubmit,formState:{errors,isSubmitting}}=useForm()
@@ -69,7 +70,7 @@ export default function Login(){
                     {errors.password&&<p className='text-red-500 text-sm'>{errors.password.message}</p>}
                     <Button
                     type='submit'
-                    text={isSubmitting?'Signing In...':'Sign In'}
+                    text={isSubmitting?<Loader/>:'Sign In'}
                     // className='w-full'
                     />
                 </form>

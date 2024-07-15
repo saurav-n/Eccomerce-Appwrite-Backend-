@@ -10,16 +10,17 @@ import { useNavigate, NavLink,Link } from 'react-router-dom'
 import { useSelector,useDispatch } from "react-redux"
 import { authService } from "../../appwriteServices/authentication"
 import { authActions } from "../../app/authSlice"
+import { useToast } from "../Toast/use-toast"
 export default function Header() {
     const [shouldNavsBeShown, setShouldNavsBeShown] = useState(false);
     const authStatus = useSelector(state => state.auth.status)
     const userData=useSelector(state=>state.auth.userData)
     const users=useSelector(state=>state.user.users)
     const [currentUser]=users.filter(user=>user.accountId===userData?.$id)
-    console.log(currentUser)
     const onHamburgerClickHandler = () => {
         setShouldNavsBeShown(prev => !prev)
     }
+    const {toast}=useToast()
     const dispatch=useDispatch()
     const navigate = useNavigate()
     const navItems = [
@@ -27,14 +28,14 @@ export default function Header() {
             name: 'Home',
             path: '/'
         },
-        {
-            name: 'About',
-            path: '/about'
-        },
-        {
-            name: 'Contact',
-            path: '/contact'
-        },
+        // {
+        //     name: 'About',
+        //     path: '/about'
+        // },
+        // {
+        //     name: 'Contact',
+        //     path: '/contact'
+        // },
         {
             name: 'Product',
             path: '/product'
@@ -90,6 +91,9 @@ export default function Header() {
                             console.log('logged out');
                             authService.logOut();
                             dispatch(authActions.logOut())
+                            toast({
+                                description:'You have logged out'
+                            })
                             navigate('/')
                         }}
                         >

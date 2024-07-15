@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import Container from "@/Components/Container";
 import FilterBox from "@/Components/filterBox";
 import Loader from "@/Components/Loader";
+import DisplayCart from "@/Components/DisplayCart";
+import HorizontalDisplayCart from "@/Components/HorizontalDisplayCart";
 import {
     Dialog,
     DialogContent,
@@ -110,7 +112,7 @@ export default function Product() {
 
     return (<Container>
         <div className="w-full h-full py-10 px-2 flex justify-center items-center">
-            <div className="w-full max-w-[800px] flex justify-center">
+            <div className="w-full max-w-[1000px] flex justify-center">
                 <div className="hidden sm:flex sm:pr-8">
                     <FilterBox
                         category={category}
@@ -140,7 +142,7 @@ export default function Product() {
                         }}
                     />
                 </div>
-                <div className="flex flex-col gap-y-3 w-full">
+                <div className="flex flex-col gap-y-3 w-full h-[800px] overflow-x-scroll">
                     <div className="flex justify-between gap-y-2 flex-wrap">
                         <div className="w-full max-w-[150px] relative">
                             <div
@@ -193,7 +195,7 @@ export default function Product() {
                                 {isSearching ? (<Loader />) : (<CiSearch />)}
                             </div>
                             <div className={`absolute w-full border-t-[1px] text-sm p-1 rounded-b-md shadow-md z-[98] 
-                            bg-white ${isSearchBarFocused ? 'inline-block' : 'hidden'}`}
+                            bg-white ${isSearchBarFocused ? 'hidden' : 'hidden'} inline-block`}
                             >
                                 <h4>{
                                     currentUser && currentUser.searchHistory.length ? 'Suggestions' : 'No Suggestions'
@@ -210,6 +212,7 @@ export default function Product() {
                                                 text-gray-500 ${activeSuggestionIndex === index ? 'bg-gray-100' : ''}`
                                                 }
                                                 onClick={() => {
+                                                    console.log('clicked')
                                                     setSearchedVal(suggestion)
                                                     SetSearchText(suggestion)
                                                     searchBarRef.current.blur()
@@ -260,7 +263,7 @@ export default function Product() {
                                     </DialogContent>
                                 </Dialog>
                             </div>
-                            <div className="flex gap-x-1">
+                            <div className="hidden sm:flex gap-x-1 ">
                                 <button
                                     className={`p-1 bg-gray-300 rounded-md ${orderOfItems === 'Grid' ? 'text-black' : 'text-white'} h-fit`}
                                     onClick={() => setOrderOfItems('Grid')}
@@ -276,13 +279,16 @@ export default function Product() {
                             </div>
                         </div>
                     </div>
-                    <div>
+                    <div className={`flex ${orderOfItems==='List'?'flex-col':''} gap-x-2 gap-y-2 flex-wrap`}>
                         {
                             isAppLoading ? (
-                                <Loader />
+                                <Loader/>
                             ) : filteredItems.length ? (
                                 filteredItems.map(item =>
-                                    <p key={item.$id}>{item.name}</p>
+                                    { return orderOfItems==='Grid'?
+                                            <DisplayCart key={item.$id} item={item}/>
+                                        :<HorizontalDisplayCart key={item.$id} item={item}/>
+                                }
                                 )
                             ) : (<p>No items found</p>)
                         }
