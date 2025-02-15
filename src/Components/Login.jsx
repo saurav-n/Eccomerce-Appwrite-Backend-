@@ -10,12 +10,11 @@ import { useLocation } from 'react-router-dom';
 import Button from './Button';
 import Loader from './Loader';
 
-export default function Login(){
+export default function Login({relocatePath}){
     const {register,handleSubmit,formState:{errors,isSubmitting}}=useForm()
     const navigate=useNavigate()
     const [error, setError] = useState('');
     const dispatch=useDispatch()
-    const relocatePath=useLocation().state.from||'/'
     const logIn=async (data)=>{
         setError('')
         try {
