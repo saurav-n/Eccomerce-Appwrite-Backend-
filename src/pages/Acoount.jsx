@@ -11,8 +11,7 @@ export default function Account(){
     return(
         <div className="w-full px-2 min-h-[600px] flex flex-wrap justify-center items-center">
             {
-                authStatus?<p>all your orders</p>:
-                <Login relocatePath={'account'}/>
+                <Login relocatePath={'/'}/>
             }
         </div>
     )

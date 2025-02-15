@@ -40,6 +40,7 @@ export default function Items() {
             ans: "Say goodbye to long wait times. We know you're eager to receive your purchases, which is why we prioritize fast and reliable shipping."
         }
     ]
+
     return (
         <Container>
             <div className="w-full flex flex-col items-center  py-4 gap-y-8">
