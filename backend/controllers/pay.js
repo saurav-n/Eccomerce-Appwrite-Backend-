@@ -16,8 +16,8 @@ const initiatePaymentKhalti = async (req, res) => {
     const response = await axios.post(
       "https://dev.khalti.com/api/v2/epayment/initiate/",
       {
-        return_url: "http://localhost:5173/pay/success",
-        website_url: "http://localhost:5173",
+        return_url: `${process.env.FRONTEND_URL}/pay/success`,
+        website_url: `${process.env.FRONTEND_URL}`,
         amount,
         purchase_order_id: orderId,
         purchase_order_name: orderName,
@@ -25,7 +25,7 @@ const initiatePaymentKhalti = async (req, res) => {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "key live_secret_key_68791341fdd94846a146f0457ff7b455",
+          Authorization: `key ${process.env.KHALTI_KEY}`,
         },
       }
     );
