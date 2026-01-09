@@ -23,7 +23,7 @@ export default function Signup() {
         setError('')
         setIsLoading(true)
         try {
-            const response=await axios.post('http://localhost:3000/api/auth/signup',data)
+            const response=await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`,data)
             if(response.data.success){
                 console.log(response.data)
                 toast({

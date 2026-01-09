@@ -1,6 +1,7 @@
 import { useState,useEffect } from "react"
+import { cn } from "@/lib/utils";
 
-export default function SlidingNavigtion({children,shouldNavsBeShown}){
+export default function SlidingNavigtion({children,shouldNavsBeShown, className=''}){
     const [slidingWindowCls, setSlidingWindowCls] = useState('translate-x-[100%]');
     const [disableScreenCls, setDisableScreenCls] = useState('hidden');
     useEffect(()=>{
@@ -15,9 +16,9 @@ export default function SlidingNavigtion({children,shouldNavsBeShown}){
     },[shouldNavsBeShown])
     return(
         <>
-        <div className={`w-screen h-screen absolute top-0 bg-[rgb(0,0,0,0.7)] ${disableScreenCls} transition-all`}></div>
+        <div className={`fixed inset-0 w-screen h-screen bg-black bg-opacity-70 z-40 ${disableScreenCls} transition-all`}></div>
         <div 
-        className={`w-[30%] min-w-[150px] h-screen fixed top-0 right-0 bg-white flex justify-center py-28 duration-200 ${slidingWindowCls}  shadow-lg`}
+        className={cn(`min-w-64 h-screen fixed top-0 right-0  flex justify-center duration-200 ${slidingWindowCls} shadow-lg z-50`,shouldNavsBeShown?'translate-x-0':'translate-x-[100%]',className)}
         >
             {children}
         </div>

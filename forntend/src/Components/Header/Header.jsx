@@ -16,7 +16,7 @@ export default function Header() {
 
     return(
         <>
-            {status==='loading'?<Skeleton className={'w-full h-16'}/>:status==='authenticated'&&data.user.role==='admin'?<AdminHeader/>:<UserHeader/>}
+            {<UserHeader/>}
         </>
     )
 }

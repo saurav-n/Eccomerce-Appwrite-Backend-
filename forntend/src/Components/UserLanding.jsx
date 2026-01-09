@@ -26,7 +26,7 @@ export default function Items() {
     }, [items])
 
     useEffect(()=>{
-        dispatch(fetchItems())
+        dispatch(fetchItems({}))
     },[dispatch])
 
     const faqs = [
@@ -78,7 +78,7 @@ export default function Items() {
                     <h1 className="text-3xl font-bold  text-gray-800">
                         Our Featured <span className="text-blue-500">Products</span>
                     </h1>
-                    <div className="flex gap-x-4 gap-y-2 flex-wrap w-full justify-center">
+                    <div className="flex gap-x-4 gap-y-2 flex-wrap w-full max-w-7xl justify-center">
                         {
                             isItemsLoading || featuredItem.length === 0 ? (
                                 <>
@@ -88,7 +88,7 @@ export default function Items() {
                                 </>
                             ) :
 
-                                featuredItem.map(item => <DisplayCart key={item.$id} item={item} />)
+                                featuredItem.map(item => <DisplayCart key={item.$id} item={item} className="max-w-48"/>)
                         }
                     </div>
                 </div>

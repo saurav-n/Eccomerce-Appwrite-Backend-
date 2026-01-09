@@ -1,14 +1,43 @@
-import {Router} from "express";
+import { Router } from "express";
 import { verifyToken } from "../middlewares/auth.js";
-import { addCategory,getCategories,addItem,deleteItem,updateItem } from "../controllers/admin.js";
+import {
+  addCategory,
+  getCategories,
+  addItem,
+  deleteItem,
+  updateItem,
+  updateCategory,
+  deleteCategory,
+  getDashBoardData,
+  getOrders,
+  getOrder
+} from "../controllers/admin.js";
 import { upload } from "../middlewares/multer.js";
+import { isAdmin } from "../middlewares/admin.js";
 
-const adminRouter=Router()
+const adminRouter = Router();
 
-adminRouter.post("/addCategory",verifyToken,addCategory)
-adminRouter.get("/getCategories",verifyToken,getCategories)
-adminRouter.post("/addItem",verifyToken,upload.array("featuredImgs"),addItem)
-adminRouter.delete("/deleteItem",verifyToken,deleteItem)
-adminRouter.post("/updateItem",verifyToken,upload.array("featuredImgs"),updateItem)
+adminRouter.use(verifyToken);
 
-export default adminRouter
+adminRouter.get("/getCategories",  getCategories);
+adminRouter.use(isAdmin)
+adminRouter.post("/addCategory",  addCategory);
+adminRouter.post(
+  "/addItem",
+  
+  upload.array("featuredImgs"),
+  addItem
+);
+adminRouter.delete("/deleteItem",  deleteItem);
+adminRouter.post(
+  "/updateItem",
+  
+  upload.array("newFeaturedImgs"),
+  updateItem
+);
+adminRouter.post("/updateCategory/:catId",  updateCategory);
+adminRouter.delete("/deleteCategory/:catId",  deleteCategory);
+adminRouter.get("/dashBoradData",  getDashBoardData);
+adminRouter.get('/orders',getOrders)
+adminRouter.get('/order/:orderId',getOrder)
+export default adminRouter;

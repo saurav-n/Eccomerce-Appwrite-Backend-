@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-aggregate-paginate-v2";
 
 const itemSchema=new mongoose.Schema({
     name:{
@@ -39,6 +40,8 @@ const itemSchema=new mongoose.Schema({
         default:[],
     },
 })
+
+itemSchema.plugin(mongoosePaginate);
 
 const Item=mongoose.model("Item",itemSchema)
 

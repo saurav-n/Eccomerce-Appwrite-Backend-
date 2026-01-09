@@ -9,10 +9,12 @@ const verifyToken=async(req,res,next)=>{
                 message:"Unauthorized"
             })
         }
+        console.log('token',token)
         const decodedToken=jwt.verify(token,process.env.JWT_SECRET)
         req.user=decodedToken
         next()
     } catch (error) {
+        console.log('verify error',error)
         return res.status(500).json({
             success:false,
             message:error.message || 'Internal Server Error'

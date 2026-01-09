@@ -32,7 +32,7 @@ export default function StarRating({ itemId,rating }) {
 
     const ratingFunction = async (starVal) => {
         try {
-            const res = await axios.post('http://localhost:3000/api/user/rateItem', {
+            const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/user/rateItem`, {
                 itemId,
                 userRate: starVal
             }, {
@@ -45,7 +45,7 @@ export default function StarRating({ itemId,rating }) {
                     variant: "default",
                     title: "Item rated successfully"
                 })
-                dispatch(fetchItems())
+                dispatch(fetchItems({}))
             }
         } catch (error) {
             toast({

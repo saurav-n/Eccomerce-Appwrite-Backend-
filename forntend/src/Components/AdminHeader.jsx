@@ -33,7 +33,7 @@ export default function AdminHeader(){
     const handleLogout=async()=>{
         setIsLoggingOut(true)
         try {
-            const response=await axios.post('http://localhost:3000/api/auth/signout',{},{
+            const response=await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signout`,{},{
                 headers:{
                     'Authorization':`Bearer ${localStorage.getItem('token')}`
                 }

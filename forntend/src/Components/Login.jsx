@@ -14,6 +14,7 @@ import Spinner from './spinner';
 import { useToast } from './Toast/use-toast';
 
 export default function Login({relocatePath}){
+    console.log(import.meta.env.VITE_BACKEND_URL)
     const {register,handleSubmit,formState:{errors,isSubmitting}}=useForm()
     const navigate=useNavigate()
     const [error, setError] = useState('');
@@ -24,7 +25,7 @@ export default function Login({relocatePath}){
         setError('')
         setIsLoading(true)
         try {
-            const response=await axios.post('http://localhost:3000/api/auth/signin',data)
+            const response=await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signin`,data,{withCredentials:true})
             if(response.data.success){
                 console.log(relocatePath)
                 const token= response.data.data.token

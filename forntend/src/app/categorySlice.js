@@ -3,11 +3,12 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const fetchCategories=createAsyncThunk("category/fetchCategories",async()=>{
-    const response=await axios.get("http://localhost:3000/api/admin/getCategories",{
+    const response=await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/admin/getCategories`,{
         headers:{
             'Authorization':`Bearer ${localStorage.getItem('token')}`
         }
     })
+    console.log('category response',response)
     return response.data.data.categories
 })
 

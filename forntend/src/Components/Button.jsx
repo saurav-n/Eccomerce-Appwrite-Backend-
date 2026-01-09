@@ -14,7 +14,7 @@ export default function Button({
         disabled={disabled}
         className={
             `${background?background:'bg-blue-500 hover:bg-blue-700'} text-white rounded-md py-2 px-4 transition-all ${className} 
-            flex gap-x-1`
+            flex gap-x-1 items-center justify-center ${disabled?'opacity-50 cursor-not-allowed':''}`
         }
         >
             {text}

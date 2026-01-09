@@ -58,7 +58,7 @@ export default function UpdateProduct() {
 
     useEffect(() => {
         dispatch(fetchCategories());
-        dispatch(fetchItems())
+        dispatch(fetchItems({}))
     }, [dispatch]);
 
     useEffect(() => {
@@ -95,57 +95,65 @@ export default function UpdateProduct() {
     };
 
     const onSubmit = async (data) => {
-        if (!selectedImages.length) {
-            toast({
-                description: 'Please select at least one image',
-            });
-            return;
-        }
+    try {
+        setLoading(true);
+        setError('');
+        const formData = new FormData();
+        formData.append('name', data.itemName);
+        formData.append('description', data.description);
+        formData.append('category', data.category);
+        formData.append('price', data.price);
+        formData.append('stock', data.stock);
+        formData.append('itemId', id);
 
-        try {
-            setLoading(true);
-            setError('');
-            const formData = new FormData();
-            formData.append('name', data.itemName);
-            formData.append('description', data.description);
-            formData.append('category', data.category);
-            formData.append('price', data.price);
-            formData.append('stock', data.stock);
+        // Separate new files and existing URLs
+        const newFiles = [];
+        const existingUrls = [];
 
-            // Append each image file individually
-            selectedImages.forEach((image, index) => {
-                formData.append('featuredImgs', image);
-            });
+        selectedImages.forEach(image => {
+            if (image instanceof File) {
+                // New file uploads
+                newFiles.push(image);
+            } else if (typeof image === 'string') {
+                // Existing image URLs
+                existingUrls.push(image);
+            }
+        });
 
-            formData.append("itemId",id)
+        // Append new files
+        newFiles.forEach(file => {
+            formData.append('newFeaturedImgs', file); // Using different field name for new files
+        });
 
-            console.log(formData)
+        // Append existing URLs as JSON string
+        formData.append('existingFeaturedImgs', JSON.stringify(existingUrls));
 
-            const response = await axios.post(`http://localhost:3000/api/admin/updateItem`, formData, {
+        const response = await axios.post(
+            `${import.meta.env.VITE_BACKEND_URL}/api/admin/updateItem`, 
+            formData, 
+            {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'multipart/form-data'
                 }
+            }
+        );
+
+        if (response.data.success) {
+            toast({
+                description: `Product "${data.itemName}" updated!`,
+                variant: 'success'
             });
-
-            if (response.data.success) {
-                toast({
-                    description: `Product "${data.itemName}" updated!`,
-                    variant: 'success'
-                });
-                dispatch(fetchItems());
-                navigate('/');
-            }
-        } catch (error) {
-            console.log(error);
-            if (error.response?.data?.message.startsWith('jwt') || error.message.startsWith('jwt')) {
-                navigate('/login');
-            }
-            setError(error.response?.data?.message);
-        } finally {
-            setLoading(false);
+            dispatch(fetchItems({}));
+            navigate('/');
         }
-    };
-
+    } catch (error) {
+        console.error('Update error:', error);
+        setError(error.response?.data?.message || 'Error updating product');
+    } finally {
+        setLoading(false);
+    }
+};
     const handleAddNewCategory = async () => {
         console.log('Add category function')
         if (newCategoryName.trim() === '') {
@@ -156,7 +164,7 @@ export default function UpdateProduct() {
         }
         try {
             setIsCategoryAdding(true);
-            const response = await axios.post('http://localhost:3000/api/admin/addCategory', { categoryName: newCategoryName }, {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/admin/addCategory`, { categoryName: newCategoryName }, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -261,30 +269,6 @@ export default function UpdateProduct() {
                                         )}
                                     </SelectContent>
                                 </Select>
-                                <Popover>
-                                    <PopoverTrigger>
-                                        <Button variant="outline" size="sm">
-                                            Add Category
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-80">
-                                        <div className="grid gap-4 p-4">
-                                            <Input
-                                                placeholder="Enter category name"
-                                                value={newCategoryName}
-                                                onChange={(e) => setNewCategoryName(e.target.value)}
-                                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                            />
-                                            <Button
-                                                onClick={()=>handleAddNewCategory()}
-                                                disabled={!newCategoryName.trim()}
-                                                className="w-full"
-                                            >
-                                                {isCategoryAdding ? <Loader /> : 'Add Category'}
-                                            </Button>
-                                        </div>
-                                    </PopoverContent>
-                                </Popover>
                             </div>
                             {errors.category && (
                                 <p className="text-sm text-red-600">{errors.category.message}</p>

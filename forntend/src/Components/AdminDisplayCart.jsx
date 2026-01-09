@@ -16,7 +16,7 @@ export default function AdminDisplayCart({ item}) {
     const handleDelete=async(itemId)=>{
         try {
             setIsDeleting(true)
-            const response=await axios.delete(`http://localhost:3000/api/admin/deleteItem?itemId=${itemId}`,{
+            const response=await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/admin/deleteItem?itemId=${itemId}`,{
                 headers:{
                     Authorization:`Bearer ${localStorage.getItem("token")}`
                 }
@@ -27,7 +27,7 @@ export default function AdminDisplayCart({ item}) {
                     title:"Success",
                     description:"Item deleted successfully"
                 })
-                dispatch(fetchItems())
+                dispatch(fetchItems({}))
             }
         } catch (error) {
             toast({

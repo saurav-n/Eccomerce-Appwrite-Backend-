@@ -106,7 +106,7 @@ export default function AddProduct() {
         try {
             setLoading(true)
             setError('')
-            const response = await axios.post('http://localhost:3000/api/admin/addItem', formData, {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/admin/addItem`, formData, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     'Content-Type': 'multipart/form-data'
@@ -116,8 +116,8 @@ export default function AddProduct() {
                 toast({
                     description: `Item "${data.itemName}" added!`,
                 })
-                dispatch(fetchItems())
-                navigate('/')
+                dispatch(fetchItems({}));
+                navigate('/');
             }
         } catch (error) {
             console.log(error)
@@ -139,7 +139,7 @@ export default function AddProduct() {
         }
         try {
             setIsCategoryAdding(true)
-            const response = await axios.post('http://localhost:3000/api/admin/addCategory', { categoryName: newCategoryName }, {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/admin/addCategory`, { categoryName: newCategoryName }, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -222,33 +222,6 @@ export default function AddProduct() {
                                         ))}
                                     </SelectContent>
                                 </Select>
-                                <Popover>
-                                    <PopoverTrigger>
-                                        <Button variant="outline" className="w-full">
-                                            Add New Category
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-80">
-                                        <div className="grid gap-4">
-                                            <div className="space-y-2">
-                                                <h4 className="font-medium leading-none">Add Category</h4>
-                                                <p className="text-sm text-muted-foreground">
-                                                    Enter the name for the new category.
-                                                </p>
-                                            </div>
-                                            <div className="grid gap-2">
-                                                <Label htmlFor="newCategoryName">Category Name</Label>
-                                                <Input
-                                                    id="newCategoryName"
-                                                    value={newCategoryName}
-                                                    onChange={(e) => setNewCategoryName(e.target.value)}
-                                                    placeholder="e.g. Smartphones"
-                                                />
-                                                <Button onClick={handleAddNewCategory} disabled={isCategoryAdding}>{isCategoryAdding ? 'Adding...' : 'Add Category'}</Button>
-                                            </div>
-                                        </div>
-                                    </PopoverContent>
-                                </Popover>
                             </div>
                             {errors.category && (
                                 <p className="text-sm text-red-600">{errors.category.message}</p>
